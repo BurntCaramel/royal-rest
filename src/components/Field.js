@@ -1,5 +1,6 @@
 import React from 'react'
 import seeds from 'react-seeds'
+import * as colors from './colors'
 
 const styles = {
     label: {
@@ -13,10 +14,10 @@ const styles = {
         width,
         margin: { left: hasTitle ? '0.5em' : null },
         font: { size: '1rem' },
-        text: { lineHeight: '1.3rem', color: '#222' },
+        text: { lineHeight: '1.3rem', color: colors.action.normal },
         padding: { left: '0.25em', right: '0.25em' },
-        background: { color: '#f6f6f6' },
-        border: { color: '#222', width: 1, style: 'solid' }
+        background: { color: colors.lightness.normal },
+        border: { color: colors.action.normal, width: 1, style: 'solid' }
     })
 }
 

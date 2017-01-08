@@ -1,13 +1,14 @@
 import React from 'react'
 import { Seed } from 'react-seeds'
+import * as colors from './colors'
 
 const styles = {
     resource: {
         column: true,
         padding: { left: '0.5em', right: '0.5em', top: '0.25em', bottom: '0.25em' },
         margin: { bottom: '0.25em' },
-        text: { color: '#f6f6f6' },
-        background: { color: '#222' }
+        text: { color: colors.action.highlight },
+        background: { color: colors.action.normal }
     },
     field: {
         row: true,
