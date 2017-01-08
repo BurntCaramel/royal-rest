@@ -1,0 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 18px;
+	font-size: calc(112.5% + 2 * (100vw - 600px) / 400);
+}
+body {
+  margin: 0;
+  /*padding: 1.333333333rem 1.7em;*/
+	line-height: 1.333333333rem;
+	font-family: system, "-apple-system", "-webkit-system-font", BlinkMacSystemFont, "Helvetica Neue", "Helvetica", "Segoe UI", "Roboto", "Arial", "freesans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	-webkit-hypens: auto; -ms-hypens: auto; hypens: auto;
+}
+button, input, textarea {
+  font: inherit;
+}
+
+h2 {
+  font-size: 1.666rem;
+  line-height: 2.666666666rem;
+}
+h3 {
+  font-size: 1.333rem;
+}
