@@ -81,6 +81,7 @@ export default class Resources extends React.PureComponent {
             itemID: 'id',
             createValues: {},
             updateValues: {},
+            lastRequest: null,
             lastResult: null
         }
 
@@ -95,16 +96,19 @@ export default class Resources extends React.PureComponent {
 
     createItem() {
         this.setState(({ collection, createValues }) => {
-            const id = createUUID() 
+            const id = createUUID()
+            const newItem = R.merge({ id }, createValues)
             return {
                 collection: R.append(
-                    R.merge({ id }, createValues),
+                    newItem,
                     collection
                 ),
                 itemID: id,
                 lastResult: {
-                    status: 200,
-                    json: { success: true }
+                    status: 201,
+                    json: {
+                        data: newItem
+                    }
                 }
             }
         })
@@ -114,7 +118,9 @@ export default class Resources extends React.PureComponent {
         this.setState(({ collection }) => ({
             lastResult: {
                 status: 200,
-                json: collection
+                json: {
+                    data: collection
+                }
             }
         }))
     }
@@ -129,10 +135,11 @@ export default class Resources extends React.PureComponent {
             return {
                 lastResult: (
                     R.isNil(item) ? ({
-                        status: 404
+                        status: 404,
+                        json: { data: null }
                     }) : ({
                         status: 200,
-                        json: item
+                        json: { data: item }
                     })
                 )
             }
@@ -140,44 +147,72 @@ export default class Resources extends React.PureComponent {
     }
 
     updateItem() {
-        this.setState(({ collection, itemID, updateValues }) => ({
-            collection: R.map(
-                (item) => (
-                    (item.id === itemID) ? (
-                        R.merge(item, updateValues)
-                    ) : (
-                        item
-                    )
-                ),
+        this.setState(({ collection, itemID, updateValues }) => {
+            const item = R.find(
+                R.propEq('id', itemID),
                 collection
-            ),
-            lastResult: {
-                status: 200,
-                json: {
-                    success: true,
-                    previousItem: R.find(
-                        R.propEq('id', itemID),
+            )
+
+            if (item) {
+                const updatedItem = R.merge(item, updateValues)
+                return {
+                    collection: R.map(
+                        (item) => (
+                            (item.id === itemID) ? (
+                                updatedItem
+                            ) : (
+                                item
+                            )
+                        ),
                         collection
-                    )
+                    ),
+                    lastResult: {
+                        status: 200,
+                        json: {
+                            data: updatedItem
+                        }
+                    }
                 }
             }
-        }))
+            else {
+                return {
+                    lastResult: {
+                        status: 404,
+                        json: {
+                            data: null
+                        }
+                    }
+                }
+            }
+        })
     }
 
     deleteItem() {
-        this.setState(({ collection, itemID }) => ({
-            collection: R.reject(R.propEq('id', itemID), collection),
-            lastResult: {
-                status: 200,
-                json: {
-                    success: true,
-                    previousItem: R.find(
-                        R.propEq('id', itemID),
-                        collection
-                    )
+        this.setState(({ collection, itemID }) => {
+            const item = R.find(
+                R.propEq('id', itemID),
+                collection
+            )
+
+            if (item) {
+                return {
+                    collection: R.reject(R.propEq('id', itemID), collection),
+                    lastResult: {
+                        status: 204
+                    }
                 }
             }
-        }))
+            else {
+                return {
+                    lastResult: {
+                        status: 404,
+                        json: {
+                            data: null
+                        }
+                    }
+                }
+            }
+        })
     }
 
     useID(id) {
