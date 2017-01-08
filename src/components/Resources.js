@@ -17,7 +17,7 @@ const styles = {
     },
     section: {
         column: true,
-        margin: { bottom: '2rem' },
+        margin: { bottom: '1rem' },
         alignItems: 'center'
     },
     routeHeading: {
@@ -245,12 +245,12 @@ export default class Resources extends React.PureComponent {
                         onChange={ this.handleEventValue('pluralName') }
                     />
                 </Section>
-
+                <Section>
                 { this.renderCollection(collection) }
                 { lastResult &&
                     <Result { ...lastResult } />
                 }
-
+                </Section>
                 <Section>
                     <h2>Create</h2>
                     <RouteHeading
