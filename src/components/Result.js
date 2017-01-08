@@ -17,7 +17,7 @@ const textForStatus = R.prop(R.__, {
 const styles = {
     json: (status) => ({
         padding: { left: '0.5em', right: '0.5em', top: '0.25em', bottom: '0.25em' },
-        text: { align: 'left', color: colorForStatus(status) },
+        text: { align: 'left', color: colorForStatus(status), whitespace: 'pre-wrap' },
         background: { color: colors.lightness.normal }
     })
 }
