@@ -87,6 +87,7 @@ export default class Resources extends React.PureComponent {
         addHandlers(this)
 
         this.createItem = this.createItem.bind(this)
+        this.listItems = this.listItems.bind(this)
         this.readItem = this.readItem.bind(this)
         this.updateItem = this.updateItem.bind(this)
         this.deleteItem = this.deleteItem.bind(this)
@@ -107,6 +108,15 @@ export default class Resources extends React.PureComponent {
                 }
             }
         })
+    }
+
+    listItems() {
+        this.setState(({ collection }) => ({
+            lastResult: {
+                status: 200,
+                json: collection
+            }
+        }))
     }
 
     readItem() {
@@ -224,9 +234,7 @@ export default class Resources extends React.PureComponent {
                     <RouteHeading
                         method='GET'
                         path={ `/${ pluralName }` }
-                        onAction={
-                            null
-                        }
+                        onAction={ this.listItems }
                     />
                     <RouteHeading
                         method='GET'
