@@ -8,7 +8,7 @@ const styles = {
         padding: { left: '0.5em', right: '0.5em', top: '0.25em', bottom: '0.25em' },
         margin: { bottom: '0.25em' },
         text: { color: colors.action.highlight },
-        background: { color: colors.action.normal }
+        background: { color: colors.text.normal }
     },
     field: {
         row: true,
