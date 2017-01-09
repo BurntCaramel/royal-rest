@@ -17,7 +17,8 @@ const styles = {
         text: { lineHeight: '1.3rem', color: colors.action.normal },
         padding: { left: '0.25em', right: '0.25em' },
         background: { color: colors.lightness.normal },
-        border: { color: colors.action.normal, width: 1, style: 'solid' }
+        border: { color: colors.action.normal, width: 1, style: 'solid' },
+        cornerRadius: 2
     })
 }
 

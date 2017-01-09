@@ -8,7 +8,8 @@ html {
   font-size: 18px;
 	font-size: calc(112.5% + 2 * (100vw - 600px) / 400);
   color: #FF3D76;
-  background-color: #ffeda6;
+  /*background-color: #ffeda6;*/
+  background-color: #fdeddd;
 }
 body {
   margin: 0;
