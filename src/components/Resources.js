@@ -1,13 +1,13 @@
 import R from 'ramda'
 import React from 'react'
 import { Seed } from 'react-seeds'
-import createUUID from 'uuid/v4'
 import Resource from './Resource'
 import ResourceEditor from './ResourceEditor'
 import Result from './Result'
 import Button from './Button'
 import Field from './Field'
 import collectionRenderer from './collectionRenderer'
+import * as crudStateChangers from '../stateChangers/crud'
 import addHandlers from './addHandlers'
 
 const styles = {
@@ -85,138 +85,9 @@ export default class Resources extends React.PureComponent {
             lastResult: null
         }
 
-        addHandlers(this)
-
-        this.createItem = this.createItem.bind(this)
-        this.listItems = this.listItems.bind(this)
-        this.readItem = this.readItem.bind(this)
-        this.updateItem = this.updateItem.bind(this)
-        this.deleteItem = this.deleteItem.bind(this)
-    }
-
-    createItem() {
-        this.setState(({ collection, createValues }) => {
-            const id = createUUID()
-            const newItem = R.merge({ id }, createValues)
-            return {
-                collection: R.append(
-                    newItem,
-                    collection
-                ),
-                itemID: id,
-                lastResult: {
-                    status: 201,
-                    json: {
-                        data: newItem
-                    }
-                }
-            }
+        addHandlers(this, {
+            changeState: crudStateChangers
         })
-    }
-
-    listItems() {
-        this.setState(({ collection }) => ({
-            lastResult: {
-                status: 200,
-                json: {
-                    data: collection
-                }
-            }
-        }))
-    }
-
-    readItem() {
-        this.setState(({ collection, itemID }) => {
-            const item = R.find(
-                R.propEq('id', itemID),
-                collection
-            )
-
-            return {
-                lastResult: (
-                    R.isNil(item) ? ({
-                        status: 404,
-                        json: { data: null }
-                    }) : ({
-                        status: 200,
-                        json: { data: item }
-                    })
-                )
-            }
-        })
-    }
-
-    updateItem() {
-        this.setState(({ collection, itemID, updateValues }) => {
-            const item = R.find(
-                R.propEq('id', itemID),
-                collection
-            )
-
-            if (item) {
-                const updatedItem = R.merge(item, updateValues)
-                return {
-                    collection: R.map(
-                        (item) => (
-                            (item.id === itemID) ? (
-                                updatedItem
-                            ) : (
-                                item
-                            )
-                        ),
-                        collection
-                    ),
-                    lastResult: {
-                        status: 200,
-                        json: {
-                            data: updatedItem
-                        }
-                    }
-                }
-            }
-            else {
-                return {
-                    lastResult: {
-                        status: 404,
-                        json: {
-                            data: null
-                        }
-                    }
-                }
-            }
-        })
-    }
-
-    deleteItem() {
-        this.setState(({ collection, itemID }) => {
-            const item = R.find(
-                R.propEq('id', itemID),
-                collection
-            )
-
-            if (item) {
-                return {
-                    collection: R.reject(R.propEq('id', itemID), collection),
-                    lastResult: {
-                        status: 204
-                    }
-                }
-            }
-            else {
-                return {
-                    lastResult: {
-                        status: 404,
-                        json: {
-                            data: null
-                        }
-                    }
-                }
-            }
-        })
-    }
-
-    useID(id) {
-        this.setState({ itemID: id })
     }
 
     renderCollection = collectionRenderer(
@@ -224,7 +95,7 @@ export default class Resources extends React.PureComponent {
             <Resource
                 values={ item }
                 schema={ this.state.schema }
-                onClick={ () => this.useID(item.id) }
+                onClick={ () => this.setState({ itemID: item.id }) }
             />
         ),
         'id',
@@ -240,7 +111,7 @@ export default class Resources extends React.PureComponent {
                 <Section>
                     <Field
                         value={ pluralName }
-                        title='Resource name'
+                        title='Collection name'
                         width='8em'
                         onChange={ this.handleEventValue('pluralName') }
                     />

@@ -1,6 +1,6 @@
 import R from 'ramda'
 
-export default function addHandlers(componentInstance) {
+export default function addHandlers(componentInstance, { changeState } = {}) {
     const setState = componentInstance.setState.bind(componentInstance)
     const evolveState = R.pipe(
       R.evolve,
@@ -8,6 +8,12 @@ export default function addHandlers(componentInstance) {
     )
 
     componentInstance.evolveState = evolveState
+
+    componentInstance.handleValue = R.memoize((stateProp) => (value) => {
+        setState({
+            [stateProp]: value
+        })
+    })
 
     componentInstance.handleEventValue = R.memoize((stateProp) => (event) => {
         setState({
@@ -22,4 +28,14 @@ export default function addHandlers(componentInstance) {
             })
         })
     })
+
+    R.forEach(
+        ([methodName, handler]) => {
+            componentInstance[methodName] = R.pipe(
+                R.always(handler),
+                setState
+            )
+        },
+        R.toPairs(changeState)
+    )
 }
