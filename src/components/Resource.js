@@ -1,41 +1,40 @@
 import React from 'react'
-import { Seed } from 'react-seeds'
 import * as colors from './colors'
 
 const styles = {
     resource: {
-        column: true,
-        padding: { left: '0.5em', right: '0.5em', top: '0.25em', bottom: '0.25em' },
-        margin: { bottom: '0.25em' },
-        text: { color: colors.action.highlight },
-        background: { color: colors.text.normal }
+        display: 'flex', flexDirection: 'column',
+        paddingLeft: '0.5em', paddingRight: '0.5em', paddingTop: '0.25em', paddingBottom: '0.25em',
+        marginBottom: '0.25em',
+        color: colors.action.highlight,
+        backgroundColor: colors.text.normal
     },
     field: {
-        row: true,
-        grow: 1,
+        display: 'flex', flexDirection: 'row',
+        flexGrow: 1,
         alignItems: 'left',
-        text: { align: 'left' }
+        textAlign: 'left'
     },
     fieldKey: {
         minWidth: '8em'
     },
     fieldValue: {
-        grow: 1
+        flexGrow: 1
     }
 }
 
 function Field({ id, value }) {
     return (
-        <Seed { ...styles.field }>
-            <Seed { ...styles.fieldKey }>{ id }</Seed>
-            <Seed { ...styles.fieldValue }>{ value }</Seed>
-        </Seed>
+        <div style={ styles.field }>
+            <div style={ styles.fieldKey }>{ id }</div>
+            <div style={ styles.fieldValue }>{ value }</div>
+        </div>
     )
 }
 
 export default function Resource({ schema = [], values, onClick }) {
     return (
-        <Seed { ...styles.resource } onClick={ onClick }>
+        <div style={ styles.resource } onClick={ onClick }>
         {
             schema.map(({ name, type }, index) => (
                 <Field key={ name }
@@ -44,6 +43,6 @@ export default function Resource({ schema = [], values, onClick }) {
                 />
             ))
         }
-        </Seed>
+        </div>
     )
 }

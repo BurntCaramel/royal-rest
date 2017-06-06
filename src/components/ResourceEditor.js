@@ -1,10 +1,13 @@
 import React from 'react'
-import { Seed } from 'react-seeds'
 import Field from './Field'
+
+const style = {
+    display: 'flex', flexDirection: 'column'
+}
 
 export default function ResourceEditor({ schema, values, onChangeField }) {
     return (
-        <Seed column>
+        <div style={ style }>
         {
             schema.map(({ name, type }) => (
                 (name === 'id') ? (
@@ -20,6 +23,6 @@ export default function ResourceEditor({ schema, values, onChangeField }) {
                 )
             ))
         }
-        </Seed>
+        </div>
     )
 }

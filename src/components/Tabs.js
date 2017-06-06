@@ -1,5 +1,4 @@
 import React from 'react'
-import { Seed } from 'react-seeds'
 import { fallow } from 'react-sow/dom'
 import Button from './Button'
 import * as colors from './colors'
@@ -15,17 +14,16 @@ const tabClasses = [
 ]
 
 const styles = {
-    row: true,
+    display: 'flex', flexDirection: 'row',
     overflow: 'hidden',
-    //inlineBlock: true,
-    border: { width: 1, style: 'solid', color: colors.action.normal },
-    cornerRadius: 5
+    borderWidth: 1, borderStyle: 'solid', borderColor: colors.action.normal,
+    borderRadius: 5
 }
 
 export default function Tabs({ items, selectedID, onSelectTab }) {
     return (
-        <Seed Component='nav'
-            { ...styles }
+        <nav
+            style={ styles }
         >
         {
             items.map(({ title, id }) => (
@@ -38,6 +36,6 @@ export default function Tabs({ items, selectedID, onSelectTab }) {
                 />
             ))
         }
-        </Seed>
+        </nav>
     )
 }

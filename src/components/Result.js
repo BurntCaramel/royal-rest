@@ -1,6 +1,5 @@
 import R from 'ramda'
 import React from 'react'
-import seeds, { Seed } from 'react-seeds'
 import * as colors from './colors'
 
 const goodStatus = (status) => status >= 200 && status < 400
@@ -16,27 +15,27 @@ const textForStatus = R.prop(R.__, {
 
 const styles = {
     json: (status) => ({
-        padding: { left: '0.5em', right: '0.5em', top: '0.25em', bottom: '0.25em' },
-        text: { align: 'left', color: colorForStatus(status), whitespace: 'pre-wrap' },
-        background: { color: colors.lightness.normal }
+        paddingLeft: '0.5em', paddingRight: '0.5em', paddingTop: '0.25em', bpaddingBottom: '0.25em',
+        textAlign: 'left',
+        color: colorForStatus(status),
+        whitespace: 'pre-wrap',
+        backgroundColor: colors.lightness.normal
     })
 }
 
 export default function Result({ status, json }) {
     return (
-        <Seed { ...styles.resource }>
-            <Seed Component='pre' { ...styles.json(status) }>
-                <span>
-                    { 'HTTP/1.1 ' }
-                    { status }
-                    { ' ' }
-                    { textForStatus(status) }
-                </span>
-                { json && '\n' }
-                { json && 'Content-Type: application/json' }
-                { '\n\n' }
-                { JSON.stringify(json, null, 2) }
-            </Seed>
-        </Seed>
+        <pre style={ styles.json(status) }>
+            <span>
+                { 'HTTP/1.1 ' }
+                { status }
+                { ' ' }
+                { textForStatus(status) }
+            </span>
+            { json && '\n' }
+            { json && 'Content-Type: application/json' }
+            { '\n\n' }
+            { JSON.stringify(json, null, 2) }
+        </pre>
     )
 }

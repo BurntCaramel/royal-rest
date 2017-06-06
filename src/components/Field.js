@@ -1,24 +1,18 @@
 import React from 'react'
-import seeds from 'react-seeds'
+import Label from './Label'
 import * as colors from './colors'
 
 const styles = {
-    label: {
-        row: true,
-        alignItems: 'baseline',
-        justifyContent: 'center',
-        text: { lineHeight: '1.3rem' }
-    },
     input: ({ hasTitle, grow, width }) => ({
-        grow,
+        flexGrow: grow,
         width,
-        margin: { left: hasTitle ? '0.5em' : null },
-        font: { size: '1rem' },
-        text: { lineHeight: '1.3rem', color: colors.action.normal },
-        padding: { left: '0.25em', right: '0.25em' },
-        background: { color: colors.lightness.normal },
-        border: { color: colors.action.normal, width: 1, style: 'solid' },
-        cornerRadius: 2
+        marginLeft: hasTitle ? '0.5em' : null,
+        fontSize: '1rem',
+        lineHeight: '1.3rem', color: colors.action.normal,
+        paddingLeft: '0.25em', paddingRight: '0.25em',
+        backgroundColor: colors.lightness.normal,
+        borderColor: colors.action.normal, borderWidth: 1, borderStyle: 'solid',
+        borderRadius: 2
     })
 }
 
@@ -28,22 +22,15 @@ export default function Field({ value, title, grow, width, onChange }) {
         <input
             value={ value }
             onChange={ onChange }
-            { ...seeds(styles.input({
+            style={ styles.input({
                 hasTitle,
                 grow,
                 width
-            })) }
+            }) }
         />
     )
 
     return (
-        (hasTitle) ? (
-            <label { ...seeds(styles.label) }>
-                <span>{ title }</span>
-                { input }
-            </label>
-        ) : (
-            input
-        )
+        <Label title={ title } children={ input } />
     )
 }

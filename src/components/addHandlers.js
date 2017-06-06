@@ -7,17 +7,15 @@ export default function addHandlers(componentInstance, { changeState } = {}) {
       setState
     )
 
-    componentInstance.evolveState = evolveState
-
     componentInstance.handleValue = R.memoize((stateProp) => (value) => {
         setState({
             [stateProp]: value
         })
     })
 
-    componentInstance.handleEventValue = R.memoize((stateProp) => (event) => {
+    componentInstance.handleEvent = R.memoize((stateProp, eventPath = ['target', 'value']) => (value) => {
         setState({
-            [stateProp]: event.target.value
+            [stateProp]: R.path(eventPath, value)
         })
     })
 
@@ -29,13 +27,29 @@ export default function addHandlers(componentInstance, { changeState } = {}) {
         })
     })
 
-    R.forEach(
-        ([methodName, handler]) => {
-            componentInstance[methodName] = R.pipe(
-                R.always(handler),
-                setState
+    componentInstance.handleArrayProp = R.memoize((stateProp, key) => (index, value) => {
+        evolveState({
+            [stateProp]: R.adjust(
+                R.assoc(key, value),
+                index
             )
-        },
-        R.toPairs(changeState)
+        })
+    })
+
+    // Custom changeState handlers
+    R.forEach(
+        R.pipe(
+            R.toPairs, // Array of key-value pairs
+            R.forEach(
+                ([methodName, handler]) => {
+                    // Assign handler method
+                    componentInstance[methodName] = R.pipe(
+                        (handler.length === 1) ? R.always(handler) : R.curry(handler),
+                        setState
+                    )
+                }
+            )
+        ),
+        [].concat(changeState) // Ensure array
     )
 }
